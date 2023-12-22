@@ -27,9 +27,6 @@
         <div id="terminal" style="height: 100%"></div>
     </div>
 <script>
-
-</script>
-<script>
     function initTerminal() {
         const term = new Terminal();
         const fitAddon = new FitAddon.FitAddon();
@@ -38,7 +35,7 @@
 
         // Register terminal resize
         fitAddon.fit();
-        document.addEventListener('resize', fitAddon.fit);
+        window.addEventListener('resize', () => (fitAddon.fit()));
 
         // Initial resize
         bubbletea_resize(term.cols, term.rows)
@@ -52,7 +49,7 @@
         }, 100);
 
         // Resize on terminal resize
-        term.onResize((size) => (bubbletea_resize(term.cols, term.rows)));
+        term.onResize((size) => (bubbletea_resize(size.cols, size.rows)));
 
         // Write xterm output to bubbletea
         term.onData((data) => (bubbletea_write(data)));

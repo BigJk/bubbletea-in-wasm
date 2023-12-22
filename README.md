@@ -1,5 +1,9 @@
 # Bubbletea in WASM
 
+<p align="center">
+  <img src="./.github/screenshot.png" alt="Screenshot of the example" />
+</p>
+
 This is a writeup on which changes to bubbletea are needed to make it work in WASM aka ``GOOS=js GOARCH=wasm go build`` and how to use it in the browser. ``main.go`` contains a working example with the bubbletea split-editor example.
 
 ## Compile Problems 
@@ -221,7 +225,7 @@ func main() {
 
         // Register terminal resize
         fitAddon.fit();
-        document.addEventListener('resize', fitAddon.fit);
+        window.addEventListener('resize', () => (fitAddon.fit()));
 
         // Initial resize
         bubbletea_resize(term.cols, term.rows)
