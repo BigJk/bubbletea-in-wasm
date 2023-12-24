@@ -214,10 +214,16 @@ func main() {
         <div id="terminal" style="height: 100%"></div>
     </div>
 <script>
-
-</script>
-<script>
     function initTerminal() {
+        // Check if bubbletea is initialized
+        if (globalThis.bubbletea_resize === undefined || globalThis.bubbletea_read === undefined || globalThis.bubbletea_write === undefined) {
+            setTimeout(() => {
+                console.log("waiting for bubbletea");
+                initTerminal();
+            }, 500);
+            return;
+        }
+        
         const term = new Terminal();
         const fitAddon = new FitAddon.FitAddon();
         term.loadAddon(fitAddon);
@@ -226,6 +232,9 @@ func main() {
         // Register terminal resize
         fitAddon.fit();
         window.addEventListener('resize', () => (fitAddon.fit()));
+        
+        // Focus terminal
+        term.focus();
 
         // Initial resize
         bubbletea_resize(term.cols, term.rows)
@@ -253,10 +262,8 @@ func main() {
                 console.log("wasm finished");
             });
 
-            // Init terminal. This should be done after bubbletea is initialized. For now, I use a timeout.
-            setTimeout(() => {
-                initTerminal();
-            }, 1000);
+            // Init terminal
+            initTerminal();
         })
     }
 

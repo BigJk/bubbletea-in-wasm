@@ -12,10 +12,11 @@
             padding: 0;
         }
 
-        .terminal-container{
+        .terminal-container {
             /* this is important */
             overflow: hidden;
         }
+
         .xterm .xterm-viewport {
             /* see : https://github.com/xtermjs/xterm.js/issues/3564#issuecomment-1004417440 */
             width: initial !important;
@@ -23,11 +24,20 @@
     </style>
 </head>
 <body>
-    <div class="terminal-container" style="height: 100%; width: 100%;">
-        <div id="terminal" style="height: 100%"></div>
-    </div>
+<div class="terminal-container" style="height: 100%; width: 100%;">
+    <div id="terminal" style="height: 100%"></div>
+</div>
 <script>
     function initTerminal() {
+        // Check if bubbletea is initialized
+        if (globalThis.bubbletea_resize === undefined || globalThis.bubbletea_read === undefined || globalThis.bubbletea_write === undefined) {
+            setTimeout(() => {
+                console.log("waiting for bubbletea");
+                initTerminal();
+            }, 500);
+            return;
+        }
+
         const term = new Terminal();
         const fitAddon = new FitAddon.FitAddon();
         term.loadAddon(fitAddon);
@@ -36,6 +46,9 @@
         // Register terminal resize
         fitAddon.fit();
         window.addEventListener('resize', () => (fitAddon.fit()));
+
+        // Focus terminal
+        term.focus();
 
         // Initial resize
         bubbletea_resize(term.cols, term.rows)
@@ -63,10 +76,8 @@
                 console.log("wasm finished");
             });
 
-            // Init terminal. This should be done after bubbletea is initialized. For now, I use a timeout.
-            setTimeout(() => {
-                initTerminal();
-            }, 1000);
+            // Init terminal
+            initTerminal();
         })
     }
 
