@@ -39,6 +39,8 @@ In this POC I solved this by the following replace in the `go.mod` to redirect t
 replace github.com/atotto/clipboard => ./_vendor/clipboard
 ```
 
+- Getting this PR into clipboard would also solve the problem: https://github.com/atotto/clipboard/pull/48
+
 ### 2. `github.com/containerd/console`
 
 The version of this package that bubbletea uses will not compile because again it doesn't have function stubs for javascript. This can be solved by using a newer version of the package. In this POC I solved this by the following replace in the `go.mod` to use the current head of the master branch.
